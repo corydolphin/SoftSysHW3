@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Softsyshw3 : " />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Softsyshw3</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/wcdolphin/SoftSysHW3">View on GitHub</a>
+
+          <h1 id="project_title">Softsyshw3</h1>
+          <h2 id="project_tagline"></h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/wcdolphin/SoftSysHW3/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/wcdolphin/SoftSysHW3/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="software-systems-homework-3-report" class="anchor" href="#software-systems-homework-3-report"><span class="octicon octicon-link"></span></a>Software Systems Homework 3 Report</h1>
+
+<h3>
+<a name="noam-rubin-and-cory-dolphin" class="anchor" href="#noam-rubin-and-cory-dolphin"><span class="octicon octicon-link"></span></a>Noam Rubin and Cory Dolphin</h3>
+
+<h6>
+<a name="code-githubcomnrubinsoftsyshw3" class="anchor" href="#code-githubcomnrubinsoftsyshw3"><span class="octicon octicon-link"></span></a>code: github.com/nrubin/SoftSysHW3</h6>
+
+<p>For this homework we chose to use a graph database called <a href="http://www.neo4j.org">neo4j</a> which specializes in graph traversal problems like the Bacon problem. We insert parsed IMDb data through the neo4j REST API and access the database by making requests to the REST API through C, then parsing the JSON results. View <a href="https://github.com/nrubin/SoftSysHW3/blob/master/README.md">README.md</a> for installation instructions.</p>
+
+<h5>
+<a name="1-installation-is-it-free--what-license-is-it-under--is-it-easy-to-install" class="anchor" href="#1-installation-is-it-free--what-license-is-it-under--is-it-easy-to-install"><span class="octicon octicon-link"></span></a>1. Installation: Is it free?  What license is it under?  Is it easy to install?</h5>
+
+<p>Neo4j actually comes in two different versions, under two very distinct licenses, in both the Neo4j Community and Neo4j Enterprise versions. The free community version is licensed under the permissive and viral GPL. The subscription based, enterprise version is offered on a subscription basis, and licensed under AGPL.</p>
+
+<h5>
+<a name="2-immersion-how-hard-is-it-to-get-started--is-there-good-documentation--example-code" class="anchor" href="#2-immersion-how-hard-is-it-to-get-started--is-there-good-documentation--example-code"><span class="octicon octicon-link"></span></a>2. Immersion: How hard is it to get started?  Is there good documentation?  Example code?</h5>
+
+<p>It's very easy to get started. Not only is the neo4j documentation thorough, but the tutorial available through the local server is the Bacon path problem. The is a lot of example code for both the Cypher query system and the many APIs that act as access points. In addition, the examples for the REST API are easy to follow and thorough.</p>
+
+<h5>
+<a name="3-semantics-what-kind-of-queries-can-the-system-handle-efficiently-is-there-a-good-match-between-these-capabilities-and-the-algorithms-we-want-to-run" class="anchor" href="#3-semantics-what-kind-of-queries-can-the-system-handle-efficiently-is-there-a-good-match-between-these-capabilities-and-the-algorithms-we-want-to-run"><span class="octicon octicon-link"></span></a>3. Semantics: What kind of queries can the system handle efficiently? Is there a good match between these capabilities and the algorithms we want to run?</h5>
+
+<p>The system can handle anything from simple lookups by node property to advanced graph traversal. The prime attraction of this database is that several shortest path algorithms are implemented at the query level, including Dijkstra's algorithm.</p>
+
+<h5>
+<a name="4-performance-how-fast-can-we-process-basic-queries--will-the-performance-scale-up-to-large-numbers-of-concurrent-queries--can-we-index-the-data-or-precompute-partial-results-to-speed-things-up" class="anchor" href="#4-performance-how-fast-can-we-process-basic-queries--will-the-performance-scale-up-to-large-numbers-of-concurrent-queries--can-we-index-the-data-or-precompute-partial-results-to-speed-things-up"><span class="octicon octicon-link"></span></a>4. Performance: How fast can we process basic queries?  Will the performance scale up to large numbers of concurrent queries?  Can we index the data or precompute partial results to speed things up?</h5>
+
+<p>We can process basic queries in ~100ms depending upon the size of the database and the performance of the machine in question. In order to speed up queries, nodes and relationships are automatically cached in memory, allowing fast traversal of common subpaths. These nodes are expired in a least recently used (LRU) fashion, and stored both in a durable file which is memory mapped, and an in-memory store.</p>
+
+<p>With this database implementation, it is difficult to explicitly recompute partial results, beyond the internal caching in Neo4j. </p>
+
+<h5>
+<a name="5-acidity-what-guarantees-can-the-dbms-make-regarding-data-consistency-integrity-and-related-issues" class="anchor" href="#5-acidity-what-guarantees-can-the-dbms-make-regarding-data-consistency-integrity-and-related-issues"><span class="octicon octicon-link"></span></a>5. ACIDity: What guarantees can the DBMS make regarding data consistency, integrity, and related issues?</h5>
+
+<p>Neo4j is fully ACID compliant, using a transactional model.</p>
+
+<h5>
+<a name="6-c-interface-if-we-implement-the-server-code-in-c-well-need-a-c-api-to-the-dbms--how-does-this-api-look--is-it-easy-to-get-started--does-it-seem-to-be-mature-and-reliable" class="anchor" href="#6-c-interface-if-we-implement-the-server-code-in-c-well-need-a-c-api-to-the-dbms--how-does-this-api-look--is-it-easy-to-get-started--does-it-seem-to-be-mature-and-reliable"><span class="octicon octicon-link"></span></a>6. C interface: If we implement the server code in C, we'll need a C API to the DBMS.  How does this API look?  Is it easy to get started?  Does it seem to be mature and reliable?</h5>
+
+<p>Though there does not exist a C driver API to neo4j, the neo4j REST API is well-developed and fairly easy to interface with. For REST operations, the <code>query.c</code> sample script uses the C standard <code>curllib</code>, and for parsing the JSON responses it uses <code>jansson</code>. As REST and JSON are both reliable and well-documented standards, implementing interaction with these standards in C is simple. There's a lot of sample code out there to this this exact thing, which helps.</p>
+
+<p>However, such an implementation is not as efficient as opening a persistent connection to a server and sending requests and receiving responses over a binary protocol, such as thrift. In this case, there is the overhead of HTTP and JSON serialization to deal with.</p>
+
+<h3>
+<a name="important-code-examples" class="anchor" href="#important-code-examples"><span class="octicon octicon-link"></span></a>Important Code Examples</h3>
+
+<p>There are a number of interesting and important code samples which help to describe the implementation, and advantages of using Neo4j for this project.</p>
+
+<p>Neo4j's domain specific knowledge about graphs allows simple builtin visualization of the data structures. As seen below, the webserver includes D3.js to display the graph, and simply querying for the first 25 relationships:</p>
+
+<pre lang="cypher"><code>MATCH (a)-[:`ACTED_IN`]-&gt;(b) RETURN a,b LIMIT 25
+</code></pre>
+
+<p>Produces a powerful graph:
+  <img src="./graph.jpg" alt="Example graph linking Aaker,Lee and Thomas Browne Henry" title="An example movie graph"></p>
+
+<p>Alternatively, because Neo4j is heavily JVM based, there are no C API drivers,
+  requiring the use of curllib or a similar HTTP library to connect to the database.
+  As such, the process of querying for the shortest path requires an HTTP request using Neo4j's query language, Cypher:</p>
+
+<pre lang="Cypher"><code>MATCH (bestmeatever:Person { name:"Bacon, Kevin (I)" }),(anobody:Person { name:"Henry, Thomas Browne" }),
+  p = shortestPath((bestmeatever)-[*..15]-(anobody))
+RETURN p
+
+</code></pre>
+
+<p><img src="./path.png" alt="Example graph linking Kevin Bacon and Thomas Browne Henry" title="An example path through movies"></p>
+
+<p>In C, using curllib, we created the following implementation:</p>
+
+<div class="highlight highlight-C"><pre><span class="kt">int</span> <span class="nf">get_shortest_path</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">origin_node_url</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">dest_node_url</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">post_write_buffer</span> <span class="n">s</span><span class="p">;</span>
+    <span class="kt">json_error_t</span> <span class="n">error</span><span class="p">;</span>
+    <span class="kt">json_t</span> <span class="o">*</span><span class="n">root</span><span class="p">,</span> <span class="o">*</span><span class="n">path_length</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ret</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">post_data</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span> <span class="o">*</span> <span class="mi">500</span><span class="p">);</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span> <span class="o">*</span> <span class="mi">200</span><span class="p">);</span>
+
+    <span class="n">sprintf</span><span class="p">(</span><span class="n">post_data</span><span class="p">,</span> <span class="s">"{ </span><span class="se">\"</span><span class="s">to</span><span class="se">\"</span><span class="s"> : </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s">, </span><span class="se">\"</span><span class="s">max_depth</span><span class="se">\"</span><span class="s"> : 10, </span><span class="se">\"</span><span class="s">algorithm</span><span class="se">\"</span><span class="s"> : </span><span class="se">\"</span><span class="s">shortestPath</span><span class="se">\"</span><span class="s"> }"</span><span class="p">,</span> <span class="n">dest_node_url</span><span class="p">);</span>
+    <span class="n">sprintf</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s">"%s/path"</span><span class="p">,</span> <span class="n">origin_node_url</span><span class="p">);</span>
+
+    <span class="kt">char</span> <span class="o">*</span><span class="n">text</span> <span class="o">=</span> <span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">post_data</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">s</span><span class="p">);</span>
+
+    <span class="n">root</span> <span class="o">=</span> <span class="n">json_loads</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">error</span><span class="p">);</span>
+
+    <span class="n">path_length</span> <span class="o">=</span> <span class="n">json_object_get</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s">"length"</span><span class="p">);</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="n">json_integer_value</span><span class="p">(</span><span class="n">path_length</span><span class="p">);</span>
+
+    <span class="n">free</span><span class="p">(</span><span class="n">post_data</span><span class="p">);</span> <span class="c1">//same as free(s-&gt;ptr)</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">url</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">text</span><span class="p">);</span>
+    <span class="n">json_decref</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+
+<span class="p">}</span>
+</pre></div>
+
+<p>While there is clearly an overhead to using the restful interface to access the
+  database, querying for the shortest path is a simple and compact command.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Softsyshw3 maintained by <a href="https://github.com/wcdolphin">wcdolphin</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
