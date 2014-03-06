@@ -85,6 +85,7 @@ char *get_node_url(char *actor_name)
     char *query = (char *) malloc(sizeof(char) * 200);
     char *ret = (char *) malloc(sizeof(char) * 100);
     sprintf(query, "{ \"query\" : \"MATCH (n {name: {name}}) RETURN n\", \"params\": { \"name\" : \"%s\" } }", actor_name);
+    puts(query);
     char url[50] = "http://localhost:7474/db/data/cypher";
 
     char *text = post(url, query, &s);
@@ -155,10 +156,11 @@ int main(int argc, char *argv[])
     char origin_actor[80];
     printf("Enter the full name of the actor for whom you would like the Bacon path:\n");
     fgets(origin_actor, 80, stdin); //read 80 characters from stdin and store them in search_for
+    puts(origin_actor);
     rstrip(origin_actor); //strip the trailing line break from the string
 
     char *origin = get_node_url(origin_actor);
-    char *KevinBacon = get_node_url("Kevin Bacon");
+    char *KevinBacon = get_node_url("Bacon, Kevin (I)");
     
     int r = get_shortest_path(origin, KevinBacon);
     printf("%s is %i hops away from Kevin Bacon\n", origin_actor,r);
