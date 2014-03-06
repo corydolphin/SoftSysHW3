@@ -20,6 +20,11 @@ For this homework we chose to use a graph database called [neo4j](http://www.neo
 
 4. Performance: How fast can we process basic queries?  Will the performance scale up to large numbers of concurrent queries?  Can we index the data or precompute partial results to speed things up?
 
+We can process basic queries in ~100ms depending upon the size of the database and the performance of the machine in question. In order to speed up queries, nodes and relationships are automatically cached in memory, allowing fast traversal of common subpaths. These nodes are expired in a least recently used (LRU) fashion, and stored both in a durable file which is memory mapped, and an in-memory store.
+
+With this database implementation, it is difficult to explicitly recompute partial results, beyond the internal caching in Neo4j. 
+
+
 5. ACIDity: What guarantees can the DBMS make regarding data consistency, integrity, and related issues?
 Neo4j is fully ACID compliant, using a transactional model.
 
@@ -27,4 +32,8 @@ Neo4j is fully ACID compliant, using a transactional model.
 
 6. C interface: If we implement the server code in C, we'll need a C API to the DBMS.  How does this API look?  Is it easy to get started?  Does it seem to be mature and reliable?
 
+
   Though there does not exist a C driver API to neo4j, the neo4j REST API is well-developed and fairly easy to interface with. For REST operations, the `query.c` sample script uses the C standard `curllib`, and for parsing the JSON responses it uses `jansson`. As REST and JSON are both reliable and well-documented standards, implementing interaction with these standards in C is simple. There's a lot of sample code out there to this this exact thing, which helps.
+
+  However, such an implementation is not as efficient as opening a persistent connection to a server and sending requests and receiving responses over a binary protocol, such as thrift. In this case, there is the overhead of HTTP and JSON serialization to deal with.
+
