@@ -85,7 +85,6 @@ char *get_node_url(char *actor_name)
     char *query = (char *) malloc(sizeof(char) * 200);
     char *ret = (char *) malloc(sizeof(char) * 100);
     sprintf(query, "{ \"query\" : \"MATCH (n {name: {name}}) RETURN n\", \"params\": { \"name\" : \"%s\" } }", actor_name);
-    puts(query);
     char url[50] = "http://localhost:7474/db/data/cypher";
 
     char *text = post(url, query, &s);
@@ -119,11 +118,10 @@ int get_shortest_path(char *origin_node_url, char *dest_node_url)
     char *post_data = (char *) malloc(sizeof(char) * 500);
     char *url = (char *) malloc(sizeof(char) * 200);
 
-    sprintf(post_data, "{ \"to\" : \"%s\", \"max_depth\" : 10, \"algorithm\" : \"shortestPath\" }", dest_node_url);
+    sprintf(post_data, "{ \"to\" : \"%s\", \"max_depth\" : 100, \"algorithm\" : \"shortestPath\" }", dest_node_url);
+
     sprintf(url, "%s/path", origin_node_url);
-
     char *text = post(url, post_data, &s);
-
     root = json_loads(text, 0, &error);
 
     path_length = json_object_get(root, "length");
@@ -156,7 +154,6 @@ int main(int argc, char *argv[])
     char origin_actor[80];
     printf("Enter the full name of the actor for whom you would like the Bacon path:\n");
     fgets(origin_actor, 80, stdin); //read 80 characters from stdin and store them in search_for
-    puts(origin_actor);
     rstrip(origin_actor); //strip the trailing line break from the string
 
     char *origin = get_node_url(origin_actor);

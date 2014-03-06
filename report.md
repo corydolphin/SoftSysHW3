@@ -37,3 +37,67 @@ Neo4j is fully ACID compliant, using a transactional model.
 
   However, such an implementation is not as efficient as opening a persistent connection to a server and sending requests and receiving responses over a binary protocol, such as thrift. In this case, there is the overhead of HTTP and JSON serialization to deal with.
 
+
+### Important Code Examples
+  There are a number of interesting and important code samples which help to describe the implementation, and advantages of using Neo4j for this project.
+
+  Neo4j's domain specific knowledge about graphs allows simple builtin visualization of the data structures. As seen below, the webserver includes D3.js to display the graph, and simply querying for the first 25 relationships:
+
+```cypher
+MATCH (a)-[:`ACTED_IN`]->(b) RETURN a,b LIMIT 25
+```
+
+  Produces a powerful graph:
+  ![Example graph linking Aaker,Lee and Thomas Browne Henry](./graph.jpg "An example movie graph")
+
+  Alternatively, because Neo4j is heavily JVM based, there are no C API drivers,
+  requiring the use of curllib or a similar HTTP library to connect to the database.
+  As such, the process of querying for the shortest path requires an HTTP request using Neo4j's query language, Cypher:
+
+```Cypher
+MATCH (bestmeatever:Person { name:"Bacon, Kevin (I)" }),(anobody:Person { name:"Henry, Thomas Browne" }),
+  p = shortestPath((bestmeatever)-[*..15]-(anobody))
+RETURN p
+
+```
+![Example graph linking Kevin Bacon and Thomas Browne Henry](./path.png "An example path through movies")
+
+In C, using curllib, we created the following implementation:
+
+```C
+int get_shortest_path(char *origin_node_url, char *dest_node_url)
+{
+    post_write_buffer s;
+    json_error_t error;
+    json_t *root, *path_length;
+    int ret;
+    char *post_data = (char *) malloc(sizeof(char) * 500);
+    char *url = (char *) malloc(sizeof(char) * 200);
+
+    sprintf(post_data, "{ \"to\" : \"%s\", \"max_depth\" : 10, \"algorithm\" : \"shortestPath\" }", dest_node_url);
+    sprintf(url, "%s/path", origin_node_url);
+
+    char *text = post(url, post_data, &s);
+
+    root = json_loads(text, 0, &error);
+
+    path_length = json_object_get(root, "length");
+    ret = (int) json_integer_value(path_length);
+
+    free(post_data); //same as free(s->ptr)
+    free(url);
+    free(text);
+    json_decref(root);
+
+    return ret;
+
+}
+```
+
+
+  While there is clearly an overhead to using the restful interface to access the
+  database, querying for the shortest path is a simple and compact command.
+
+
+
+
