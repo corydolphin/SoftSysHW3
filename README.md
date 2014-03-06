@@ -34,3 +34,14 @@ All the magic is in `query.c`, which depends on `curllib` for HTTP requests and 
   make check
   make install
   ```
+
+3. Install [Neo4j](http://www.neo4j.org/download)
+
+4. Insert the data:
+```bash
+$ python parse.py
+$ python insert.py
+```
+
+5. Run `make` in this directory.
+6. Run the executable `query` and input a starting node name. 
