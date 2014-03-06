@@ -20,9 +20,9 @@ For this homework we chose to use a graph database called [neo4j](http://www.neo
 
 4. Performance: How fast can we process basic queries?  Will the performance scale up to large numbers of concurrent queries?  Can we index the data or precompute partial results to speed things up?
 
-We can process basic queries in ~100ms depending upon the size of the database and the performance of the machine in question. In order to speed up queries, nodes and relationships are automatically cached in memory, allowing fast traversal of common subpaths. These nodes are expired in a least recently used (LRU) fashion, and stored both in a durable file which is memory mapped, and an in-memory store.
+  We can process basic queries in ~100ms depending upon the size of the database and the performance of the machine in question. In order to speed up queries, nodes and relationships are automatically cached in memory, allowing fast traversal of common subpaths. These nodes are expired in a least recently used (LRU) fashion, and stored both in a durable file which is memory mapped, and an in-memory store.
 
-With this database implementation, it is difficult to explicitly recompute partial results, beyond the internal caching in Neo4j. 
+  With this database implementation, it is difficult to explicitly recompute partial results, beyond the internal caching in Neo4j. 
 
 
 5. ACIDity: What guarantees can the DBMS make regarding data consistency, integrity, and related issues?
